@@ -58,50 +58,56 @@ def create_top_artists_image(top_artists):
         image.paste(artist_image, (140, 200), mask)
 
         try:
-            font_title = ImageFont.truetype("arial.ttf", 80)
-            font_text = ImageFont.truetype("arial.ttf", 50)
-            font_subtitle = ImageFont.truetype("arial.ttf", 60)
+            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
+            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
+            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
+            font_artist_name = ImageFont.truetype("arial.ttf", 70)
         except:
+            print("Error cargando fuentes, usando fuentes por defecto")
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
             font_subtitle = ImageFont.load_default()
+            font_artist_name = ImageFont.load_default()
 
-        # Añadir un fondo semi-transparente detrás del texto para mejorar la legibilidad
+        # Mejorar contraste añadiendo fondos semi-transparentes
         text_background = Image.new('RGBA', (width, 200), (0, 0, 0, 180))
         image.paste(text_background, (0, 0), text_background)
         image.paste(text_background, (0, height-200), text_background)
 
-        # Título con estilo y mayor contraste
-        draw.text((width//2, 80), "TOP ARTISTAS 2024", fill='white',
-                  font=font_title, anchor="mm", stroke_width=2, stroke_fill='black')
+        # Título con mejor contraste
+        draw.text((width//2, 80), "TOP ARTISTAS 2024",
+                 fill=SPOTIFY_GREEN, font=font_title, anchor="mm")
 
-        # Artista principal
-        draw.text((width//2, 1050), "Tu Artista Favorito", fill=SPOTIFY_GREEN,
-                 font=font_subtitle, anchor="mm")
-        draw.text((width//2, 1120), top_artist["name"], fill='white',
-                 font=ImageFont.truetype("arial.ttf", 70), anchor="mm")
+        # Artista principal con mejor visibilidad
+        draw.text((width//2, 1050), "Tu Artista Favorito",
+                 fill=SPOTIFY_GREEN, font=font_subtitle, anchor="mm")
+        draw.text((width//2, 1120), top_artist["name"],
+                 fill='white', font=font_artist_name, anchor="mm")
 
-        # Lista de artistas con números estilizados
+        # Lista de artistas con mejor espaciado
         y_position = 1250
         for i, artist in enumerate(top_artists["items"][1:6], 2):
-            # Círculo numerado
+            # Círculo numerado más grande
             circle_x = width//2 - 200
             circle_radius = 30
             draw.ellipse((circle_x-circle_radius, y_position-circle_radius,
                          circle_x+circle_radius, y_position+circle_radius),
                         fill=SPOTIFY_GREEN)
-            draw.text((circle_x, y_position), str(i), fill='black',
-                     font=font_text, anchor="mm")
-            # Nombre del artista
+            draw.text((circle_x, y_position), str(i),
+                     fill='black', font=font_text, anchor="mm")
+
+            # Nombre del artista con mejor espaciado
             draw.text((circle_x + 100, y_position), artist["name"],
                      fill='white', font=font_text, anchor="lm")
             y_position += 80
 
-        # Pie de imagen personalizado con mayor contraste
+        # Pie de imagen con mejor contraste
         draw.text((width//2, height-120), "Spotify Wrapped",
-                 fill='white', font=font_text, anchor="mm", stroke_width=2, stroke_fill='black')
+                 fill='white', font=font_text, anchor="mm",
+                 stroke_width=2, stroke_fill='black')
         draw.text((width//2, height-70), "For DavC",
-                 fill='white', font=font_subtitle, anchor="mm", stroke_width=2, stroke_fill='black')
+                 fill='white', font=font_subtitle, anchor="mm",
+                 stroke_width=2, stroke_fill='black')
 
     except Exception as e:
         print(f"Error creando imagen de artistas: {str(e)}")
