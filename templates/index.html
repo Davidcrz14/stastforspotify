@@ -7,6 +7,61 @@
     <title>Mi Spotify Wrapped</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../static/css/styles.css">
+    <style>
+        .stats-carousel {
+            width: 100%;
+            max-width: 1080px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .full-size-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .download-btn {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #1DB954;
+            color: black;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            background-color: #1ed760;
+        }
+
+        .carousel-btn {
+            background-color: #1DB954;
+            color: black;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-btn:hover {
+            background-color: #1ed760;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 
 <body class="bg-black min-h-screen">
@@ -29,16 +84,15 @@
 
         <!-- Sección de resultados -->
         <div id="results-section" class="hidden">
-            <!-- Carrusel de imágenes -->
-            <div class="stats-carousel rounded-lg overflow-hidden shadow-2xl">
+            <div class="stats-carousel">
                 <div class="carousel-inner">
                     <!-- Las imágenes se insertarán aquí dinámicamente -->
                 </div>
                 <div class="carousel-controls mt-6 text-center space-x-4">
-                    <button id="prev-btn" class="text-spotify-green px-4 py-2 rounded-full mr-4">
+                    <button id="prev-btn" class="carousel-btn">
                         ← Anterior
                     </button>
-                    <button id="next-btn" class="text-spotify-green px-4 py-2 rounded-full">
+                    <button id="next-btn" class="carousel-btn">
                         Siguiente →
                     </button>
                 </div>

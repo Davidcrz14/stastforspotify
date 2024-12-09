@@ -133,15 +133,36 @@ function displayStats(stats) {
     carousel.innerHTML = '';
 
     // Agregar imágenes al carrusel
-    stats.images.forEach(imageData => {
+    stats.images.forEach((imageData, index) => {
+        const slideDiv = document.createElement('div');
+        slideDiv.className = 'carousel-slide';
+
         const img = document.createElement('img');
         img.src = `data:image/png;base64,${imageData}`;
-        img.classList.add('fade-in');
-        carousel.appendChild(img);
+        img.classList.add('fade-in', 'full-size-image');
+
+        const downloadBtn = document.createElement('button');
+        downloadBtn.className = 'download-btn';
+        downloadBtn.innerHTML = '⬇️ Descargar';
+        downloadBtn.onclick = () => downloadImage(imageData, `wrapped_${index + 1}.png`);
+
+        slideDiv.appendChild(img);
+        slideDiv.appendChild(downloadBtn);
+        carousel.appendChild(slideDiv);
     });
 
     showResults();
     setupCarousel();
+}
+
+// Función para descargar la imagen
+function downloadImage(base64Data, fileName) {
+    const link = document.createElement('a');
+    link.href = `data:image/png;base64,${base64Data}`;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 // Configuración del carrusel
