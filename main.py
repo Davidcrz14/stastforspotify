@@ -18,9 +18,9 @@ SCOPE = "user-top-read user-read-recently-played"
 
 # Añadir constantes para la generación de imágenes
 IMAGES_DIR = "wrapped_images"
-FONT_SIZE_TITLE = 100
-FONT_SIZE_TEXT = 60
-FONT_SIZE_SUBTITLE = 70
+FONT_SIZE_TITLE = 85
+FONT_SIZE_TEXT = 45
+FONT_SIZE_SUBTITLE = 55
 BACKGROUND_COLOR = (25, 20, 20)
 SPOTIFY_GREEN = (30, 215, 96)
 
@@ -65,7 +65,7 @@ def create_top_artists_image(top_artists):
             font_title = ImageFont.truetype(FONT_PATH, FONT_SIZE_TITLE)
             font_text = ImageFont.truetype(FONT_PATH, FONT_SIZE_TEXT)
             font_subtitle = ImageFont.truetype(FONT_PATH, FONT_SIZE_SUBTITLE)
-            font_artist_name = ImageFont.truetype(FONT_PATH, 90)
+            font_artist_name = ImageFont.truetype(FONT_PATH, 75)
         except Exception as e:
             print(f"Error cargando fuentes: {e}, usando fuentes por defecto")
             font_title = ImageFont.load_default()
@@ -138,7 +138,7 @@ def create_top_tracks_image(top_tracks):
             font_title = ImageFont.truetype(FONT_PATH, FONT_SIZE_TITLE)
             font_text = ImageFont.truetype(FONT_PATH, FONT_SIZE_TEXT)
             font_subtitle = ImageFont.truetype(FONT_PATH, FONT_SIZE_SUBTITLE)
-            font_track_name = ImageFont.truetype(FONT_PATH, 90)
+            font_track_name = ImageFont.truetype(FONT_PATH, 75)
         except Exception as e:
             print(f"Error cargando fuentes: {e}, usando fuentes por defecto")
             font_title = ImageFont.load_default()
@@ -220,7 +220,7 @@ def create_genres_image(top_artists):
         try:
             font_title = ImageFont.truetype(FONT_PATH, FONT_SIZE_TITLE)
             font_text = ImageFont.truetype(FONT_PATH, FONT_SIZE_TEXT)
-            font_genre = ImageFont.truetype(FONT_PATH, 90)
+            font_genre = ImageFont.truetype(FONT_PATH, 75)
             font_subtitle = ImageFont.truetype(FONT_PATH, FONT_SIZE_SUBTITLE)
         except Exception as e:
             print(f"Error cargando fuentes: {e}, usando fuentes por defecto")
