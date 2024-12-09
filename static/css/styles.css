@@ -1,0 +1,89 @@
+:root {
+    --spotify-green: #1DB954;
+    --spotify-green-dark: #1aa34a;
+}
+
+.text-spotify-green {
+    color: var(--spotify-green);
+}
+
+.bg-spotify-green {
+    background-color: var(--spotify-green);
+}
+
+.bg-spotify-green-dark {
+    background-color: var(--spotify-green-dark);
+}
+
+/* Loader */
+.spotify-loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #333;
+    border-top-color: var(--spotify-green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Carrusel */
+.stats-carousel {
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #121212;
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    height: 100%;
+}
+
+.carousel-inner img {
+    width: 100%;
+    flex-shrink: 0;
+    object-fit: contain;
+    max-height: 90vh;
+}
+
+.carousel-controls button {
+    border: 2px solid var(--spotify-green);
+    transition: all 0.3s ease;
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+}
+
+.carousel-controls button:hover {
+    background-color: var(--spotify-green);
+    color: black;
+    transform: scale(1.05);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .stats-carousel {
+        max-width: 100%;
+    }
+
+    .carousel-controls button {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}

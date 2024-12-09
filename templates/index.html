@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Spotify Wrapped</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body class="bg-black min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Sección inicial -->
+        <div id="login-section" class="text-center">
+            <h1 class="text-spotify-green text-4xl md:text-5xl font-bold mb-8">Mi Spotify Wrapped</h1>
+            <p class="text-gray-300 mb-8 text-lg">Descubre tus estadísticas personalizadas de Spotify</p>
+            <button id="login-button"
+                    class="bg-spotify-green hover:bg-spotify-green-dark text-black font-bold py-4 px-8 rounded-full text-xl transition-all duration-300 transform hover:scale-105">
+                Iniciar con Spotify
+            </button>
+        </div>
+
+        <!-- Sección de carga -->
+        <div id="loading-section" class="hidden text-center">
+            <div class="spotify-loader"></div>
+            <p class="text-white text-xl mt-4" id="loading-text">Redirigiendo a Spotify...</p>
+        </div>
+
+        <!-- Sección de resultados -->
+        <div id="results-section" class="hidden">
+            <!-- Carrusel de imágenes -->
+            <div class="stats-carousel rounded-lg overflow-hidden shadow-2xl">
+                <div class="carousel-inner">
+                    <!-- Las imágenes se insertarán aquí dinámicamente -->
+                </div>
+                <div class="carousel-controls mt-6 text-center space-x-4">
+                    <button id="prev-btn" class="text-spotify-green px-4 py-2 rounded-full mr-4">
+                        ← Anterior
+                    </button>
+                    <button id="next-btn" class="text-spotify-green px-4 py-2 rounded-full">
+                        Siguiente →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../static/js/app.js"></script>
+</body>
+</html>
