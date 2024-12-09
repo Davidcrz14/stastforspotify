@@ -14,7 +14,7 @@ app = Flask(__name__)
 # Obtener variables de entorno
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
-REDIRECT_URI = os.getenv("REDIRECT_URI")
+REDIRECT_URI = "https://statsspoti.vercel.app/callback"
 
 @app.route('/')
 def index():
