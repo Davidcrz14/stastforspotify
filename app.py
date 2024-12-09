@@ -56,13 +56,11 @@ def get_stats():
             'recent': create_recent_tracks_image(recent)
         }
 
-        # Convertir imágenes a base64 con mejor calidad
+        # Convertir imágenes a base64
         encoded_images = []
         for img in images.values():
             buffered = BytesIO()
-            img.save(buffered, format="PNG",
-                    optimize=False,  # Desactivar optimización
-                    quality=100)     # Máxima calidad
+            img.save(buffered, format="PNG")
             img_str = base64.b64encode(buffered.getvalue()).decode()
             encoded_images.append(img_str)
 

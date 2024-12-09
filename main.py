@@ -17,15 +17,11 @@ SCOPE = "user-top-read user-read-recently-played"
 
 # Añadir constantes para la generación de imágenes
 IMAGES_DIR = "wrapped_images"
-FONT_SIZE_TITLE = 120
-FONT_SIZE_TEXT = 72
-FONT_SIZE_SUBTITLE = 90
+FONT_SIZE_TITLE = 80
+FONT_SIZE_TEXT = 50
+FONT_SIZE_SUBTITLE = 60
 BACKGROUND_COLOR = (25, 20, 20)
 SPOTIFY_GREEN = (30, 215, 96)
-
-# Aumentar la resolución de la imagen
-WIDTH = 1920  # Aumentado de 1080
-HEIGHT = 3240  # Aumentado de 1920
 
 def download_image(url):
     response = requests.get(url)
@@ -36,45 +32,76 @@ def create_directory():
         os.makedirs(IMAGES_DIR)
 
 def create_top_artists_image(top_artists):
-    width, height = WIDTH, HEIGHT
+    width, height = 1080, 1920
     image = Image.new('RGB', (width, height), BACKGROUND_COLOR)
     draw = ImageDraw.Draw(image)
 
     try:
-        # Mejorar la calidad del fondo
+        # Efecto de fondo con la imagen del artista top
         top_artist = top_artists["items"][0]
         artist_image_url = top_artist["images"][0]["url"]
         background = download_image(artist_image_url)
-        background = background.resize((width, height), Image.Resampling.LANCZOS)
-        background = background.filter(ImageFilter.GaussianBlur(radius=15))
+        background = background.resize((width, height)).convert('RGBA')
+        # Aplicar efecto de desenfoque y oscurecimiento
+        background = background.filter(ImageFilter.GaussianBlur(radius=10))
         background = Image.blend(Image.new('RGB', (width, height), (0,0,0)), background.convert('RGB'), 0.3)
         image.paste(background, (0,0))
 
-        # Mejorar la calidad del texto
+        # Imagen principal del artista
+        artist_image = download_image(artist_image_url)
+        artist_image = artist_image.resize((800, 800))
+        # Crear máscara circular
+        mask = Image.new('L', (800, 800), 0)
+        draw_mask = ImageDraw.Draw(mask)
+        draw_mask.ellipse((0, 0, 800, 800), fill=255)
+        # Aplicar máscara circular
+        image.paste(artist_image, (140, 200), mask)
+
         try:
-            # Intentar cargar fuentes con antialiasing
-            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE * 2)
-            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT * 2)
-            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE * 2)
+            font_title = ImageFont.truetype("arial.ttf", 80)
+            font_text = ImageFont.truetype("arial.ttf", 50)
+            font_subtitle = ImageFont.truetype("arial.ttf", 60)
         except:
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
             font_subtitle = ImageFont.load_default()
 
-        # Añadir sombras al texto para mejor legibilidad
-        def draw_text_with_shadow(x, y, text, font, fill, anchor="mm", shadow_color=(0,0,0)):
-            # Dibujar sombra
-            shadow_offset = 4
-            draw.text((x+shadow_offset, y+shadow_offset), text,
-                     font=font, fill=shadow_color, anchor=anchor)
-            # Dibujar texto principal
-            draw.text((x, y), text, font=font, fill=fill, anchor=anchor)
+        # Añadir un fondo semi-transparente detrás del texto para mejorar la legibilidad
+        text_background = Image.new('RGBA', (width, 200), (0, 0, 0, 180))
+        image.paste(text_background, (0, 0), text_background)
+        image.paste(text_background, (0, height-200), text_background)
 
-        # Aplicar el nuevo método de dibujo de texto a todos los textos
-        draw_text_with_shadow(width//2, 80, "TOP ARTISTAS 2024",
-                            font_title, 'white')
+        # Título con estilo y mayor contraste
+        draw.text((width//2, 80), "TOP ARTISTAS 2024", fill='white',
+                  font=font_title, anchor="mm", stroke_width=2, stroke_fill='black')
 
-        # ... aplicar el mismo patrón a todos los textos ...
+        # Artista principal
+        draw.text((width//2, 1050), "Tu Artista Favorito", fill=SPOTIFY_GREEN,
+                 font=font_subtitle, anchor="mm")
+        draw.text((width//2, 1120), top_artist["name"], fill='white',
+                 font=ImageFont.truetype("arial.ttf", 70), anchor="mm")
+
+        # Lista de artistas con números estilizados
+        y_position = 1250
+        for i, artist in enumerate(top_artists["items"][1:6], 2):
+            # Círculo numerado
+            circle_x = width//2 - 200
+            circle_radius = 30
+            draw.ellipse((circle_x-circle_radius, y_position-circle_radius,
+                         circle_x+circle_radius, y_position+circle_radius),
+                        fill=SPOTIFY_GREEN)
+            draw.text((circle_x, y_position), str(i), fill='black',
+                     font=font_text, anchor="mm")
+            # Nombre del artista
+            draw.text((circle_x + 100, y_position), artist["name"],
+                     fill='white', font=font_text, anchor="lm")
+            y_position += 80
+
+        # Pie de imagen personalizado con mayor contraste
+        draw.text((width//2, height-120), "Spotify Wrapped",
+                 fill='white', font=font_text, anchor="mm", stroke_width=2, stroke_fill='black')
+        draw.text((width//2, height-70), "For DavC",
+                 fill='white', font=font_subtitle, anchor="mm", stroke_width=2, stroke_fill='black')
 
     except Exception as e:
         print(f"Error creando imagen de artistas: {str(e)}")
@@ -98,9 +125,9 @@ def create_top_tracks_image(top_tracks):
         image.paste(background, (0,0))
 
         try:
-            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
-            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
+            font_title = ImageFont.truetype("arial.ttf", 80)
+            font_text = ImageFont.truetype("arial.ttf", 50)
+            font_subtitle = ImageFont.truetype("arial.ttf", 60)
         except:
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
@@ -123,11 +150,11 @@ def create_top_tracks_image(top_tracks):
         # Info de canción principal
         draw.text((width//2, 650), "Tu Canción Más Escuchada",
                  fill=SPOTIFY_GREEN, font=font_subtitle, anchor="mm")
-        draw.text((width//2, 700), top_track["name"],
-                 fill='white', font=font_title, anchor="mm")
+        draw.text((width//2, 700), top_track["name"], fill='white',
+                 font=ImageFont.truetype("arial.ttf", 70), anchor="mm")
         artists = ", ".join([artist["name"] for artist in top_track["artists"]])
-        draw.text((width//2, 770), artists,
-                 fill='gray', font=font_subtitle, anchor="mm")
+        draw.text((width//2, 770), artists, fill='gray',
+                 font=ImageFont.truetype("arial.ttf", 50), anchor="mm")
 
         # Lista de canciones con miniaturas
         y_position = 900
@@ -187,10 +214,10 @@ def create_genres_image(top_artists):
         image.paste(background)
 
         try:
-            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
-            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_genre = ImageFont.truetype("arial.ttf", 70)
-            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
+            font_title = ImageFont.truetype("arial.ttf", 80)
+            font_text = ImageFont.truetype("arial.ttf", 50)
+            font_genre = ImageFont.truetype("arial.ttf", 60)
+            font_subtitle = ImageFont.truetype("arial.ttf", 60)
         except:
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
@@ -212,7 +239,7 @@ def create_genres_image(top_artists):
         main_box = Image.new('RGB', (main_size, main_size), (40, 40, 40))
         draw_box = ImageDraw.Draw(main_box)
         draw_box.text((main_size//2, main_size//2), genres[0][0].title(),
-                     fill=SPOTIFY_GREEN, font=font_genre, anchor="mm")
+                     fill=SPOTIFY_GREEN, font=ImageFont.truetype("arial.ttf", 70), anchor="mm")
         image.paste(main_box, (width//2-main_size//2, 250))
 
         # Texto del género principal
@@ -428,7 +455,7 @@ def print_wrapped_stats(token):
     print("\n=== 🎵 Tu Wrapped Personal 🎵 ===\n")
 
     # Top Artistas
-    print("👥 Tus Artistas M��s Escuchados:")
+    print("👥 Tus Artistas Más Escuchados:")
     top_artists = get_top_artists(token)
     for i, artist in enumerate(top_artists["items"][:10], 1):
         print(f"{i}. {artist['name']}")
