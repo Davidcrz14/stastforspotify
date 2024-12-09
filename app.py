@@ -7,12 +7,13 @@ from PIL import Image
 from main import (create_top_artists_image, create_top_tracks_image,
                  create_genres_image, create_recent_tracks_image,
                  get_top_artists, get_top_tracks, get_recently_played)
+import os
 
 app = Flask(__name__)
 
-CLIENT_ID = "09ad32ff6cd44f92af6deb600e170ac9"
-CLIENT_SECRET = "5990d5fae92842c3929807c8e19409cd"
-REDIRECT_URI = "http://localhost:5000/callback"
+CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID", "09ad32ff6cd44f92af6deb600e170ac9")
+CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET", "5990d5fae92842c3929807c8e19409cd")
+REDIRECT_URI = os.getenv("REDIRECT_URI", "https://tu-dominio-vercel.vercel.app/callback")
 
 @app.route('/')
 def index():
@@ -70,4 +71,4 @@ def get_stats():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
