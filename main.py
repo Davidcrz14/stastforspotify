@@ -131,22 +131,25 @@ def create_top_tracks_image(top_tracks):
         image.paste(background, (0,0))
 
         try:
-            font_title = ImageFont.truetype("arial.ttf", 80)
-            font_text = ImageFont.truetype("arial.ttf", 50)
-            font_subtitle = ImageFont.truetype("arial.ttf", 60)
+            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
+            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
+            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
+            font_track_name = ImageFont.truetype("arial.ttf", 70)
         except:
+            print("Error cargando fuentes, usando fuentes por defecto")
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
             font_subtitle = ImageFont.load_default()
+            font_track_name = ImageFont.load_default()
 
-        # Añadir un fondo semi-transparente detrás del texto para mejorar la legibilidad
+        # Añadir fondos semi-transparentes para mejorar legibilidad
         text_background = Image.new('RGBA', (width, 200), (0, 0, 0, 180))
         image.paste(text_background, (0, 0), text_background)
         image.paste(text_background, (0, height-200), text_background)
 
-        # Título con mayor contraste
-        draw.text((width//2, 80), "TOP CANCIONES 2024", fill='white',
-                 font=font_title, anchor="mm", stroke_width=2, stroke_fill='black')
+        # Título
+        draw.text((width//2, 80), "TOP CANCIONES 2024",
+                 fill=SPOTIFY_GREEN, font=font_title, anchor="mm")
 
         # Canción principal
         main_album_image = download_image(track_image_url)
@@ -156,13 +159,13 @@ def create_top_tracks_image(top_tracks):
         # Info de canción principal
         draw.text((width//2, 650), "Tu Canción Más Escuchada",
                  fill=SPOTIFY_GREEN, font=font_subtitle, anchor="mm")
-        draw.text((width//2, 700), top_track["name"], fill='white',
-                 font=ImageFont.truetype("arial.ttf", 70), anchor="mm")
+        draw.text((width//2, 720), top_track["name"],
+                 fill='white', font=font_track_name, anchor="mm")
         artists = ", ".join([artist["name"] for artist in top_track["artists"]])
-        draw.text((width//2, 770), artists, fill='gray',
-                 font=ImageFont.truetype("arial.ttf", 50), anchor="mm")
+        draw.text((width//2, 790), artists,
+                 fill='white', font=font_text, anchor="mm")
 
-        # Lista de canciones con miniaturas
+        # Lista de canciones
         y_position = 900
         for i, track in enumerate(top_tracks["items"][1:6], 2):
             # Miniatura del álbum
@@ -183,20 +186,18 @@ def create_top_tracks_image(top_tracks):
             draw.text((250, y_position+10), track["name"],
                      fill='white', font=font_text, anchor="lm")
             artists = ", ".join([artist["name"] for artist in track["artists"]])
-            draw.text((250, y_position+50), artists,
-                     fill='gray', font=font_subtitle, anchor="lm")
-
-            # Línea divisoria
-            draw.line((50, y_position+120, width-50, y_position+120),
-                     fill=(40, 40, 40), width=2)
+            draw.text((250, y_position+60), artists,
+                     fill='white', font=font_subtitle, anchor="lm")
 
             y_position += 160
 
-        # Pie de imagen personalizado con mayor contraste
+        # Pie de imagen
         draw.text((width//2, height-120), "Spotify Wrapped",
-                 fill='white', font=font_text, anchor="mm", stroke_width=2, stroke_fill='black')
+                 fill='white', font=font_text, anchor="mm",
+                 stroke_width=2, stroke_fill='black')
         draw.text((width//2, height-70), "For DavC",
-                 fill='white', font=font_subtitle, anchor="mm", stroke_width=2, stroke_fill='black')
+                 fill='white', font=font_subtitle, anchor="mm",
+                 stroke_width=2, stroke_fill='black')
 
     except Exception as e:
         print(f"Error creando imagen de canciones: {str(e)}")
@@ -212,75 +213,78 @@ def create_genres_image(top_artists):
         # Obtener géneros
         genres = get_favorite_genres(top_artists)
 
-        # Crear fondo con degradado simple
-        background = Image.new('RGB', (width, height), BACKGROUND_COLOR)
-        for i in range(0, height, 2):
-            alpha = int(255 * (1 - i/height))
-            draw.line((0, i, width, i), fill=(30, 215, 96, alpha), width=1)
-        image.paste(background)
-
         try:
-            font_title = ImageFont.truetype("arial.ttf", 80)
-            font_text = ImageFont.truetype("arial.ttf", 50)
-            font_genre = ImageFont.truetype("arial.ttf", 60)
-            font_subtitle = ImageFont.truetype("arial.ttf", 60)
+            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
+            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
+            font_genre = ImageFont.truetype("arial.ttf", 70)
+            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
         except:
+            print("Error cargando fuentes, usando fuentes por defecto")
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
             font_genre = ImageFont.load_default()
             font_subtitle = ImageFont.load_default()
 
-        # Banners decorativos
-        draw.rectangle((0, 0, width, 150), fill=(0,0,0,180))
+        # Fondo con degradado
+        for i in range(height):
+            alpha = int(255 * (1 - i/height))
+            draw.line((0, i, width, i),
+                     fill=(30, 215, 96, alpha), width=1)
+
+        # Banners semi-transparentes
+        draw.rectangle((0, 0, width, 200), fill=(0,0,0,180))
         draw.rectangle((0, height-200, width, height), fill=(0,0,0,180))
 
-        # Título y subtítulo
-        draw.text((width//2, 80), "TUS GÉNEROS TOP", fill=SPOTIFY_GREEN,
-                 font=font_title, anchor="mm")
+        # Título
+        draw.text((width//2, 80), "TUS GÉNEROS TOP",
+                 fill=SPOTIFY_GREEN, font=font_title, anchor="mm")
         draw.text((width//2, 150), "Los géneros que más escuchaste",
                  fill='white', font=font_subtitle, anchor="mm")
 
-        # Imagen principal del género top
-        main_size = 400
-        main_box = Image.new('RGB', (main_size, main_size), (40, 40, 40))
-        draw_box = ImageDraw.Draw(main_box)
-        draw_box.text((main_size//2, main_size//2), genres[0][0].title(),
-                     fill=SPOTIFY_GREEN, font=ImageFont.truetype("arial.ttf", 70), anchor="mm")
-        image.paste(main_box, (width//2-main_size//2, 250))
+        # Género principal
+        if genres:
+            main_genre = genres[0][0].title()
+            main_size = 400
+            main_box = Image.new('RGB', (main_size, main_size), (40, 40, 40))
+            draw_box = ImageDraw.Draw(main_box)
+            draw_box.text((main_size//2, main_size//2), main_genre,
+                         fill=SPOTIFY_GREEN, font=font_genre, anchor="mm")
+            image.paste(main_box, (width//2-main_size//2, 250))
 
-        # Texto del género principal
-        draw.text((width//2, 700), "Tu Género Favorito",
-                 fill=SPOTIFY_GREEN, font=font_subtitle, anchor="mm")
-        draw.text((width//2, 750), genres[0][0].title(),
-                 fill='white', font=font_title, anchor="mm")
+            draw.text((width//2, 700), "Tu Género Favorito",
+                     fill=SPOTIFY_GREEN, font=font_subtitle, anchor="mm")
+            draw.text((width//2, 770), main_genre,
+                     fill='white', font=font_title, anchor="mm")
 
-        # Lista de géneros restantes
-        y_position = 900
-        for i, (genre, count) in enumerate(genres[1:], 2):
-            # Rectángulo de fondo
-            draw.rectangle((50, y_position, width-50, y_position+100),
-                         fill=(40, 40, 40))
+            # Lista de géneros restantes
+            y_position = 900
+            for i, (genre, count) in enumerate(genres[1:6], 2):
+                # Rectángulo de fondo
+                draw.rectangle((50, y_position, width-50, y_position+100),
+                             fill=(40, 40, 40))
 
-            # Número en círculo
-            circle_x = 100
-            circle_radius = 25
-            draw.ellipse((circle_x-circle_radius, y_position+50-circle_radius,
-                         circle_x+circle_radius, y_position+50+circle_radius),
-                        fill=SPOTIFY_GREEN)
-            draw.text((circle_x, y_position+50), str(i),
-                     fill='black', font=font_text, anchor="mm")
+                # Número en círculo
+                circle_x = 100
+                circle_radius = 25
+                draw.ellipse((circle_x-circle_radius, y_position+50-circle_radius,
+                             circle_x+circle_radius, y_position+50+circle_radius),
+                            fill=SPOTIFY_GREEN)
+                draw.text((circle_x, y_position+50), str(i),
+                         fill='black', font=font_text, anchor="mm")
 
-            # Nombre del género
-            draw.text((circle_x + 100, y_position+50), genre.title(),
-                     fill='white', font=font_genre, anchor="lm")
+                # Nombre del género
+                draw.text((circle_x + 100, y_position+50), genre.title(),
+                         fill='white', font=font_genre, anchor="lm")
 
-            y_position += 150
+                y_position += 150
 
-        # Pie de imagen personalizado
+        # Pie de imagen
         draw.text((width//2, height-120), "Spotify Wrapped",
-                 fill=SPOTIFY_GREEN, font=font_text, anchor="mm")
+                 fill='white', font=font_text, anchor="mm",
+                 stroke_width=2, stroke_fill='black')
         draw.text((width//2, height-70), "For DavC",
-                 fill='white', font=font_subtitle, anchor="mm")
+                 fill='white', font=font_subtitle, anchor="mm",
+                 stroke_width=2, stroke_fill='black')
 
     except Exception as e:
         print(f"Error creando imagen de géneros: {str(e)}")
