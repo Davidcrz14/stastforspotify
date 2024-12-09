@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import io
 from datetime import datetime
 import os
+import platform
 
 # Credenciales de tu aplicación
 CLIENT_ID = "09ad32ff6cd44f92af6deb600e170ac9"
@@ -17,11 +18,14 @@ SCOPE = "user-top-read user-read-recently-played"
 
 # Añadir constantes para la generación de imágenes
 IMAGES_DIR = "wrapped_images"
-FONT_SIZE_TITLE = 80
-FONT_SIZE_TEXT = 50
-FONT_SIZE_SUBTITLE = 60
+FONT_SIZE_TITLE = 100
+FONT_SIZE_TEXT = 60
+FONT_SIZE_SUBTITLE = 70
 BACKGROUND_COLOR = (25, 20, 20)
 SPOTIFY_GREEN = (30, 215, 96)
+
+# Definir la ruta a la fuente
+FONT_PATH = os.path.join(os.path.dirname(__file__), 'fonts', 'arial.ttf')
 
 def download_image(url):
     response = requests.get(url)
@@ -58,12 +62,12 @@ def create_top_artists_image(top_artists):
         image.paste(artist_image, (140, 200), mask)
 
         try:
-            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
-            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
-            font_artist_name = ImageFont.truetype("arial.ttf", 70)
-        except:
-            print("Error cargando fuentes, usando fuentes por defecto")
+            font_title = ImageFont.truetype(FONT_PATH, FONT_SIZE_TITLE)
+            font_text = ImageFont.truetype(FONT_PATH, FONT_SIZE_TEXT)
+            font_subtitle = ImageFont.truetype(FONT_PATH, FONT_SIZE_SUBTITLE)
+            font_artist_name = ImageFont.truetype(FONT_PATH, 90)
+        except Exception as e:
+            print(f"Error cargando fuentes: {e}, usando fuentes por defecto")
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
             font_subtitle = ImageFont.load_default()
@@ -131,12 +135,12 @@ def create_top_tracks_image(top_tracks):
         image.paste(background, (0,0))
 
         try:
-            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
-            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
-            font_track_name = ImageFont.truetype("arial.ttf", 70)
-        except:
-            print("Error cargando fuentes, usando fuentes por defecto")
+            font_title = ImageFont.truetype(FONT_PATH, FONT_SIZE_TITLE)
+            font_text = ImageFont.truetype(FONT_PATH, FONT_SIZE_TEXT)
+            font_subtitle = ImageFont.truetype(FONT_PATH, FONT_SIZE_SUBTITLE)
+            font_track_name = ImageFont.truetype(FONT_PATH, 90)
+        except Exception as e:
+            print(f"Error cargando fuentes: {e}, usando fuentes por defecto")
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
             font_subtitle = ImageFont.load_default()
@@ -214,12 +218,12 @@ def create_genres_image(top_artists):
         genres = get_favorite_genres(top_artists)
 
         try:
-            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
-            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_genre = ImageFont.truetype("arial.ttf", 70)
-            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
-        except:
-            print("Error cargando fuentes, usando fuentes por defecto")
+            font_title = ImageFont.truetype(FONT_PATH, FONT_SIZE_TITLE)
+            font_text = ImageFont.truetype(FONT_PATH, FONT_SIZE_TEXT)
+            font_genre = ImageFont.truetype(FONT_PATH, 90)
+            font_subtitle = ImageFont.truetype(FONT_PATH, FONT_SIZE_SUBTITLE)
+        except Exception as e:
+            print(f"Error cargando fuentes: {e}, usando fuentes por defecto")
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
             font_genre = ImageFont.load_default()
@@ -308,10 +312,10 @@ def create_recent_tracks_image(recent_tracks):
         image.paste(background, (0,0))
 
         try:
-            font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
-            font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_time = ImageFont.truetype("arial.ttf", 30)
-        except:
+            font_title = ImageFont.truetype(FONT_PATH, FONT_SIZE_TITLE)
+            font_text = ImageFont.truetype(FONT_PATH, FONT_SIZE_TEXT)
+            font_time = ImageFont.truetype(FONT_PATH, 30)
+        except Exception as e:
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
             font_time = ImageFont.load_default()
@@ -462,7 +466,7 @@ def get_favorite_genres(top_artists):
     return genre_count.most_common(5)
 
 def print_wrapped_stats(token):
-    print("\n=== 🎵 Tu Wrapped Personal 🎵 ===\n")
+    print("\n=== �� Tu Wrapped Personal 🎵 ===\n")
 
     # Top Artistas
     print("👥 Tus Artistas Más Escuchados:")
