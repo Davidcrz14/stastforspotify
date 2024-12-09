@@ -1,6 +1,6 @@
 let currentSlide = 0;
 const CLIENT_ID = "09ad32ff6cd44f92af6deb600e170ac9";
-const REDIRECT_URI = "http://localhost:5000/callback";
+const REDIRECT_URI = "https://statsspoti.vercel.app/callback";
 const SCOPE = "user-top-read user-read-recently-played";
 
 // Función para generar el estado aleatorio
