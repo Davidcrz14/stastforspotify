@@ -25,27 +25,45 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 1rem;
+            gap: 1rem;
         }
 
         .full-size-image {
             width: 100%;
             height: auto;
             object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0;
+            position: relative;
+            z-index: 10;
         }
 
         .download-btn {
-            margin-top: 1rem;
-            padding: 0.75rem 1.5rem;
+            margin: 1rem 0;
+            padding: 1rem 2rem;
             background-color: #1DB954;
-            color: black;
+            color: white;
             border-radius: 9999px;
             font-weight: bold;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
         }
 
         .download-btn:hover {
             transform: scale(1.05);
             background-color: #1ed760;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
 
         .carousel-btn {

@@ -141,13 +141,18 @@ function displayStats(stats) {
         img.src = `data:image/png;base64,${imageData}`;
         img.classList.add('fade-in', 'full-size-image');
 
+        // Crear contenedor para botón de descarga
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'button-container';
+
         const downloadBtn = document.createElement('button');
         downloadBtn.className = 'download-btn';
-        downloadBtn.innerHTML = '⬇️ Descargar';
+        downloadBtn.innerHTML = '⬇️ Descargar imagen en tamaño original';
         downloadBtn.onclick = () => downloadImage(imageData, `wrapped_${index + 1}.png`);
 
+        buttonContainer.appendChild(downloadBtn);
         slideDiv.appendChild(img);
-        slideDiv.appendChild(downloadBtn);
+        slideDiv.appendChild(buttonContainer);
         carousel.appendChild(slideDiv);
     });
 
@@ -157,12 +162,17 @@ function displayStats(stats) {
 
 // Función para descargar la imagen
 function downloadImage(base64Data, fileName) {
-    const link = document.createElement('a');
-    link.href = `data:image/png;base64,${base64Data}`;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+        const link = document.createElement('a');
+        link.href = `data:image/png;base64,${base64Data}`;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (error) {
+        console.error('Error al descargar la imagen:', error);
+        alert('Hubo un error al descargar la imagen. Por favor, intenta de nuevo.');
+    }
 }
 
 // Configuración del carrusel
