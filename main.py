@@ -12,7 +12,7 @@ import os
 # Credenciales de tu aplicación
 CLIENT_ID = "09ad32ff6cd44f92af6deb600e170ac9"
 CLIENT_SECRET = "5990d5fae92842c3929807c8e19409cd"
-REDIRECT_URI = "http://localhost:5000/callback"
+REDIRECT_URI = "https://statsspoti.vercel.app/callback"
 SCOPE = "user-top-read user-read-recently-played"
 
 # Añadir constantes para la generación de imágenes
