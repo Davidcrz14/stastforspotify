@@ -65,13 +65,14 @@ def create_top_artists_image(top_artists):
             font_text = ImageFont.load_default()
             font_subtitle = ImageFont.load_default()
 
-        # Añadir decoración y efectos
-        draw.rectangle((0, 0, width, 150), fill=(0,0,0,180))  # Banner superior
-        draw.rectangle((0, height-200, width, height), fill=(0,0,0,180))  # Banner inferior
+        # Añadir un fondo semi-transparente detrás del texto para mejorar la legibilidad
+        text_background = Image.new('RGBA', (width, 200), (0, 0, 0, 180))
+        image.paste(text_background, (0, 0), text_background)
+        image.paste(text_background, (0, height-200), text_background)
 
-        # Título con estilo
-        draw.text((width//2, 80), "TOP ARTISTAS 2024", fill=SPOTIFY_GREEN,
-                  font=font_title, anchor="mm")
+        # Título con estilo y mayor contraste
+        draw.text((width//2, 80), "TOP ARTISTAS 2024", fill='white',
+                  font=font_title, anchor="mm", stroke_width=2, stroke_fill='black')
 
         # Artista principal
         draw.text((width//2, 1050), "Tu Artista Favorito", fill=SPOTIFY_GREEN,
@@ -95,11 +96,11 @@ def create_top_artists_image(top_artists):
                      fill='white', font=font_text, anchor="lm")
             y_position += 80
 
-        # Pie de imagen personalizado
+        # Pie de imagen personalizado con mayor contraste
         draw.text((width//2, height-120), "Spotify Wrapped",
-                 fill=SPOTIFY_GREEN, font=font_text, anchor="mm")
+                 fill='white', font=font_text, anchor="mm", stroke_width=2, stroke_fill='black')
         draw.text((width//2, height-70), "For DavC",
-                 fill='white', font=font_subtitle, anchor="mm")
+                 fill='white', font=font_subtitle, anchor="mm", stroke_width=2, stroke_fill='black')
 
     except Exception as e:
         print(f"Error creando imagen de artistas: {str(e)}")
@@ -131,13 +132,14 @@ def create_top_tracks_image(top_tracks):
             font_text = ImageFont.load_default()
             font_subtitle = ImageFont.load_default()
 
-        # Banners y decoración
-        draw.rectangle((0, 0, width, 150), fill=(0,0,0,180))
-        draw.rectangle((0, height-200, width, height), fill=(0,0,0,180))
+        # Añadir un fondo semi-transparente detrás del texto para mejorar la legibilidad
+        text_background = Image.new('RGBA', (width, 200), (0, 0, 0, 180))
+        image.paste(text_background, (0, 0), text_background)
+        image.paste(text_background, (0, height-200), text_background)
 
-        # Título
-        draw.text((width//2, 80), "TOP CANCIONES 2024", fill=SPOTIFY_GREEN,
-                 font=font_title, anchor="mm")
+        # Título con mayor contraste
+        draw.text((width//2, 80), "TOP CANCIONES 2024", fill='white',
+                 font=font_title, anchor="mm", stroke_width=2, stroke_fill='black')
 
         # Canción principal
         main_album_image = download_image(track_image_url)
@@ -183,11 +185,11 @@ def create_top_tracks_image(top_tracks):
 
             y_position += 160
 
-        # Pie de imagen personalizado
+        # Pie de imagen personalizado con mayor contraste
         draw.text((width//2, height-120), "Spotify Wrapped",
-                 fill=SPOTIFY_GREEN, font=font_text, anchor="mm")
+                 fill='white', font=font_text, anchor="mm", stroke_width=2, stroke_fill='black')
         draw.text((width//2, height-70), "For DavC",
-                 fill='white', font=font_subtitle, anchor="mm")
+                 fill='white', font=font_subtitle, anchor="mm", stroke_width=2, stroke_fill='black')
 
     except Exception as e:
         print(f"Error creando imagen de canciones: {str(e)}")
