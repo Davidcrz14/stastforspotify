@@ -186,10 +186,19 @@ def create_top_tracks_image(top_tracks):
             draw.text((circle_x, y_position+25), str(i),
                      fill='black', font=font_text, anchor="mm")
 
-            # Información de la canción
-            draw.text((250, y_position+10), track["name"],
-                     fill='white', font=font_text, anchor="lm")
+            # Ajustar el texto para que no se salga
+            track_name = track["name"]
             artists = ", ".join([artist["name"] for artist in track["artists"]])
+
+            # Limitar longitud del texto si es necesario
+            if len(track_name) > 25:
+                track_name = track_name[:22] + "..."
+            if len(artists) > 30:
+                artists = artists[:27] + "..."
+
+            # Información de la canción con posición ajustada
+            draw.text((250, y_position+10), track_name,
+                     fill='white', font=font_text, anchor="lm")
             draw.text((250, y_position+60), artists,
                      fill='white', font=font_subtitle, anchor="lm")
 
@@ -229,58 +238,59 @@ def create_genres_image(top_artists):
             font_genre = ImageFont.load_default()
             font_subtitle = ImageFont.load_default()
 
-        # Fondo con degradado
+        # Crear un fondo más atractivo
+        # Gradiente diagonal en vez de vertical
         for i in range(height):
             alpha = int(255 * (1 - i/height))
             draw.line((0, i, width, i),
-                     fill=(30, 215, 96, alpha), width=1)
+                     fill=(30, 215, 96, max(30, alpha)), width=1)
 
-        # Banners semi-transparentes
+        # Añadir un overlay oscuro para mejor contraste
+        overlay = Image.new('RGBA', (width, height), (0, 0, 0, 100))
+        image.paste(overlay, (0, 0), overlay)
+
+        # Banner superior más estilizado
         draw.rectangle((0, 0, width, 200), fill=(0,0,0,180))
-        draw.rectangle((0, height-200, width, height), fill=(0,0,0,180))
 
-        # Título
+        # Título con mejor diseño
         draw.text((width//2, 80), "TUS GÉNEROS TOP",
                  fill=SPOTIFY_GREEN, font=font_title, anchor="mm")
         draw.text((width//2, 150), "Los géneros que más escuchaste",
                  fill='white', font=font_subtitle, anchor="mm")
 
-        # Género principal
+        # Género principal con diseño mejorado
         if genres:
             main_genre = genres[0][0].title()
-            main_size = 400
-            main_box = Image.new('RGB', (main_size, main_size), (40, 40, 40))
-            draw_box = ImageDraw.Draw(main_box)
-            draw_box.text((main_size//2, main_size//2), main_genre,
-                         fill=SPOTIFY_GREEN, font=font_genre, anchor="mm")
-            image.paste(main_box, (width//2-main_size//2, 250))
+            # Crear un rectángulo más estilizado para el género principal
+            main_box_height = 200
+            draw.rectangle((50, 300, width-50, 300+main_box_height),
+                         fill=(40, 40, 40))
 
-            draw.text((width//2, 700), "Tu Género Favorito",
-                     fill=SPOTIFY_GREEN, font=font_subtitle, anchor="mm")
-            draw.text((width//2, 770), main_genre,
+            # Texto del género principal
+            draw.text((width//2, 400), main_genre,
                      fill='white', font=font_title, anchor="mm")
 
-            # Lista de géneros restantes
-            y_position = 900
+            # Lista de géneros restantes con mejor diseño
+            y_position = 600
             for i, (genre, count) in enumerate(genres[1:6], 2):
-                # Rectángulo de fondo
-                draw.rectangle((50, y_position, width-50, y_position+100),
+                # Rectángulo de fondo más elegante
+                draw.rectangle((50, y_position, width-50, y_position+80),
                              fill=(40, 40, 40))
 
-                # Número en círculo
+                # Círculo verde más pequeño y elegante
                 circle_x = 100
-                circle_radius = 25
-                draw.ellipse((circle_x-circle_radius, y_position+50-circle_radius,
-                             circle_x+circle_radius, y_position+50+circle_radius),
+                circle_radius = 20
+                draw.ellipse((circle_x-circle_radius, y_position+40-circle_radius,
+                            circle_x+circle_radius, y_position+40+circle_radius),
                             fill=SPOTIFY_GREEN)
-                draw.text((circle_x, y_position+50), str(i),
+                draw.text((circle_x, y_position+40), str(i),
                          fill='black', font=font_text, anchor="mm")
 
-                # Nombre del género
-                draw.text((circle_x + 100, y_position+50), genre.title(),
-                         fill='white', font=font_genre, anchor="lm")
+                # Nombre del género con mejor espaciado
+                draw.text((circle_x + 80, y_position+40), genre.title(),
+                         fill='white', font=font_text, anchor="lm")
 
-                y_position += 150
+                y_position += 100
 
         # Pie de imagen
         draw.text((width//2, height-120), "Spotify Wrapped",
@@ -320,8 +330,10 @@ def create_recent_tracks_image(recent_tracks):
             font_text = ImageFont.load_default()
             font_time = ImageFont.load_default()
 
-        # Título
-        draw.text((width//2, 100), "REPRODUCIDO RECIENTEMENTE",
+        # Título dividido en dos líneas
+        draw.text((width//2, 60), "REPRODUCIDO",
+                 fill=SPOTIFY_GREEN, font=font_title, anchor="mm")
+        draw.text((width//2, 140), "RECIENTEMENTE",
                  fill=SPOTIFY_GREEN, font=font_title, anchor="mm")
 
         # Lista de canciones recientes con portadas
@@ -466,7 +478,7 @@ def get_favorite_genres(top_artists):
     return genre_count.most_common(5)
 
 def print_wrapped_stats(token):
-    print("\n=== �� Tu Wrapped Personal 🎵 ===\n")
+    print("\n=== Tu Wrapped Personal 🎵 ===\n")
 
     # Top Artistas
     print("👥 Tus Artistas Más Escuchados:")
