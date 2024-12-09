@@ -17,8 +17,11 @@ SCOPE = "user-top-read user-read-recently-played"
 
 # Añadir constantes para la generación de imágenes
 IMAGES_DIR = "wrapped_images"
-FONT_SIZE_TITLE = 60
-FONT_SIZE_TEXT = 36
+FONT_SIZE_TITLE = 90
+FONT_SIZE_TEXT = 50
+FONT_SIZE_SUBTITLE = 60
+FONT_SIZE_GENRE = 90
+FONT_SIZE_TIME = 40
 BACKGROUND_COLOR = (25, 20, 20)
 SPOTIFY_GREEN = (30, 215, 96)
 
@@ -59,7 +62,7 @@ def create_top_artists_image(top_artists):
         try:
             font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
             font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_subtitle = ImageFont.truetype("arial.ttf", 45)
+            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
         except:
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
@@ -94,7 +97,7 @@ def create_top_artists_image(top_artists):
             # Nombre del artista
             draw.text((circle_x + 100, y_position), artist["name"],
                      fill='white', font=font_text, anchor="lm")
-            y_position += 80
+            y_position += 120
 
         # Pie de imagen personalizado con mayor contraste
         draw.text((width//2, height-120), "Spotify Wrapped",
@@ -126,7 +129,7 @@ def create_top_tracks_image(top_tracks):
         try:
             font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
             font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_subtitle = ImageFont.truetype("arial.ttf", 45)
+            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
         except:
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
@@ -183,7 +186,7 @@ def create_top_tracks_image(top_tracks):
             draw.line((50, y_position+120, width-50, y_position+120),
                      fill=(40, 40, 40), width=2)
 
-            y_position += 160
+            y_position += 200
 
         # Pie de imagen personalizado con mayor contraste
         draw.text((width//2, height-120), "Spotify Wrapped",
@@ -215,8 +218,8 @@ def create_genres_image(top_artists):
         try:
             font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
             font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_genre = ImageFont.truetype("arial.ttf", 70)
-            font_subtitle = ImageFont.truetype("arial.ttf", 45)
+            font_genre = ImageFont.truetype("arial.ttf", FONT_SIZE_GENRE)
+            font_subtitle = ImageFont.truetype("arial.ttf", FONT_SIZE_SUBTITLE)
         except:
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
@@ -267,7 +270,7 @@ def create_genres_image(top_artists):
             draw.text((circle_x + 100, y_position+50), genre.title(),
                      fill='white', font=font_genre, anchor="lm")
 
-            y_position += 150
+            y_position += 180
 
         # Pie de imagen personalizado
         draw.text((width//2, height-120), "Spotify Wrapped",
@@ -299,7 +302,7 @@ def create_recent_tracks_image(recent_tracks):
         try:
             font_title = ImageFont.truetype("arial.ttf", FONT_SIZE_TITLE)
             font_text = ImageFont.truetype("arial.ttf", FONT_SIZE_TEXT)
-            font_time = ImageFont.truetype("arial.ttf", 30)
+            font_time = ImageFont.truetype("arial.ttf", FONT_SIZE_TIME)
         except:
             font_title = ImageFont.load_default()
             font_text = ImageFont.load_default()
@@ -329,7 +332,7 @@ def create_recent_tracks_image(recent_tracks):
             draw.line((50, y_position+220, width-50, y_position+220),
                      fill='gray', width=1)
 
-            y_position += 300
+            y_position += 350
 
         # Pie de imagen
         draw.text((width//2, height-100), "Spotify Wrapped",
