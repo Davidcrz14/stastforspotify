@@ -11,9 +11,10 @@ import os
 
 app = Flask(__name__)
 
-CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID", "09ad32ff6cd44f92af6deb600e170ac9")
-CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET", "5990d5fae92842c3929807c8e19409cd")
-REDIRECT_URI = os.getenv("REDIRECT_URI", "https://tu-dominio-vercel.vercel.app/callback")
+# Obtener variables de entorno
+CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
+CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 @app.route('/')
 def index():
@@ -70,5 +71,6 @@ def get_stats():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# Importante: Esto es para desarrollo local
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
