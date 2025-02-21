@@ -10,13 +10,11 @@ from datetime import datetime
 import os
 import platform
 
-# Credenciales de tu aplicación
 CLIENT_ID = "09ad32ff6cd44f92af6deb600e170ac9"
 CLIENT_SECRET = "5990d5fae92842c3929807c8e19409cd"
 REDIRECT_URI = "https://statsspoti.vercel.app/callback"
 SCOPE = "user-top-read user-read-recently-played"
 
-# Añadir constantes para la generación de imágenes
 IMAGES_DIR = "wrapped_images"
 FONT_SIZE_TITLE = 85
 FONT_SIZE_TEXT = 45
@@ -24,7 +22,6 @@ FONT_SIZE_SUBTITLE = 55
 BACKGROUND_COLOR = (25, 20, 20)
 SPOTIFY_GREEN = (30, 215, 96)
 
-# Definir la ruta a la fuente
 FONT_PATH = os.path.join(os.path.dirname(__file__), 'fonts', 'arial.ttf')
 
 def download_image(url):
@@ -41,24 +38,19 @@ def create_top_artists_image(top_artists):
     draw = ImageDraw.Draw(image)
 
     try:
-        # Efecto de fondo con la imagen del artista top
         top_artist = top_artists["items"][0]
         artist_image_url = top_artist["images"][0]["url"]
         background = download_image(artist_image_url)
         background = background.resize((width, height)).convert('RGBA')
-        # Aplicar efecto de desenfoque y oscurecimiento
         background = background.filter(ImageFilter.GaussianBlur(radius=10))
         background = Image.blend(Image.new('RGB', (width, height), (0,0,0)), background.convert('RGB'), 0.3)
         image.paste(background, (0,0))
 
-        # Imagen principal del artista
         artist_image = download_image(artist_image_url)
         artist_image = artist_image.resize((800, 800))
-        # Crear máscara circular
         mask = Image.new('L', (800, 800), 0)
         draw_mask = ImageDraw.Draw(mask)
         draw_mask.ellipse((0, 0, 800, 800), fill=255)
-        # Aplicar máscara circular
         image.paste(artist_image, (140, 200), mask)
 
         try:
@@ -73,25 +65,20 @@ def create_top_artists_image(top_artists):
             font_subtitle = ImageFont.load_default()
             font_artist_name = ImageFont.load_default()
 
-        # Mejorar contraste añadiendo fondos semi-transparentes
         text_background = Image.new('RGBA', (width, 200), (0, 0, 0, 180))
         image.paste(text_background, (0, 0), text_background)
         image.paste(text_background, (0, height-200), text_background)
 
-        # Título con mejor contraste
         draw.text((width//2, 80), "TOP ARTISTAS 2024",
                  fill=SPOTIFY_GREEN, font=font_title, anchor="mm")
 
-        # Artista principal con mejor visibilidad
         draw.text((width//2, 1050), "Tu Artista Favorito",
                  fill=SPOTIFY_GREEN, font=font_subtitle, anchor="mm")
         draw.text((width//2, 1120), top_artist["name"],
                  fill='white', font=font_artist_name, anchor="mm")
 
-        # Lista de artistas con mejor espaciado
         y_position = 1250
         for i, artist in enumerate(top_artists["items"][1:6], 2):
-            # Círculo numerado más grande
             circle_x = width//2 - 200
             circle_radius = 30
             draw.ellipse((circle_x-circle_radius, y_position-circle_radius,
@@ -100,12 +87,10 @@ def create_top_artists_image(top_artists):
             draw.text((circle_x, y_position), str(i),
                      fill='black', font=font_text, anchor="mm")
 
-            # Nombre del artista con mejor espaciado
             draw.text((circle_x + 100, y_position), artist["name"],
                      fill='white', font=font_text, anchor="lm")
             y_position += 80
 
-        # Pie de imagen con mejor contraste
         draw.text((width//2, height-120), "Spotify Wrapped",
                  fill='white', font=font_text, anchor="mm",
                  stroke_width=2, stroke_fill='black')
